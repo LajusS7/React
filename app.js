@@ -164,3 +164,79 @@ function About() {
     </div>
   );
 }
+
+function App() {
+  // State 1: which view is showing
+  const [view, setView] = useState("dashboard");
+  // State 2: light or dark theme
+  const [theme, setTheme] = useState("light");
+  // State 3: selected character
+  const [selected, setSelected] = useState("Nero");
+  // State 4: missions array
+  const [missions, setMissions] = useState([
+    { id: 1, name: "Opera House", character: "Nero", done: true },
+    { id: 2, name: "Fight Berial", character: "Nero", done: false },
+    { id: 3, name: "Fight Echidna", character: "Dante", done: false },
+  ]);
+
+  function toggleTheme() {
+    setTheme(theme === "light" ? "dark" : "light");
+  }
+
+  function addMission(name, character) {
+    const newMission = { id: Date.now(), name: name, character: character, done: false };
+    setMissions([...missions, newMission]);
+  }
+
+  function toggleMission(id) {
+    setMissions(
+      missions.map((m) => (m.id === id ? { ...m, done: !m.done } : m))
+    );
+  }
+
+  const completed = missions.filter((m) => m.done).length;
+
+  return (
+    <div className={theme === "dark" ? "app dark" : "app"}>
+      <Header setView={setView} theme={theme} toggleTheme={toggleTheme} />
+
+      {view === "about" ? (
+        <About />
+      ) : (
+        <div>
+          <StatusSummary
+            completed={completed}
+            total={missions.length}
+            selected={selected}
+            theme={theme}
+          />
+
+          <div className="grid">
+            {characters.map((c) => (
+              <CharacterCard
+                key={c.id}
+                character={c}
+                selected={selected}
+                onSelect={setSelected}
+              />
+            ))}
+          </div>
+
+          <div className="grid">
+            <WeaponList weapons={weapons} selected={selected} />
+            <EnemyList enemies={enemies} />
+            <ItemList items={items} />
+          </div>
+
+          <div className="grid">
+            <MissionList missions={missions} onToggle={toggleMission} />
+            <AddMissionForm onAdd={addMission} />
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<App />);
