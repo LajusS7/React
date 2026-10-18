@@ -30,3 +30,69 @@ const items = [
   { id: 3, name: "Holy Water", effect: "Damages enemies on screen" },
   { id: 4, name: "Gold Orb", effect: "Revives you after dying" },
 ];
+
+function Header(props) {
+  return (
+    <div className="header">
+      <h1>DMC4 Dashboard</h1>
+      <div>
+        <button onClick={() => props.setView("dashboard")}>Dashboard</button>
+        <button onClick={() => props.setView("about")}>About</button>
+        <button onClick={props.toggleTheme}>Theme: {props.theme}</button>
+      </div>
+    </div>
+  );
+}
+
+function CharacterCard(props) {
+  const isSelected = props.selected === props.character.name;
+  return (
+    <div className={isSelected ? "card selected" : "card"}>
+      <h3>{props.character.name}</h3>
+      <p>{props.character.info}</p>
+      <button onClick={() => props.onSelect(props.character.name)}>
+        {isSelected ? "Selected" : "Select"}
+      </button>
+    </div>
+  );
+}
+
+function WeaponList(props) {
+  const filtered = props.weapons.filter((w) => w.owner === props.selected);
+  return (
+    <div className="card">
+      <h2>{props.selected}'s Weapons</h2>
+      <ul>
+        {filtered.map((w) => (
+          <li key={w.id}>{w.name}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function EnemyList(props) {
+  return (
+    <div className="card">
+      <h2>Enemies</h2>
+      <ul>
+        {props.enemies.map((e) => (
+          <li key={e.id}>{e.name} ({e.type})</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function ItemList(props) {
+  return (
+    <div className="card">
+      <h2>Items</h2>
+      <ul>
+        {props.items.map((i) => (
+          <li key={i.id}>{i.name} - {i.effect}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
