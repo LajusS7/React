@@ -96,3 +96,71 @@ function ItemList(props) {
     </div>
   );
 }
+function MissionList(props) {
+  return (
+    <div className="card">
+      <h2>Missions</h2>
+      <ul>
+        {props.missions.map((m) => (
+          <li key={m.id} className={m.done ? "done" : ""}>
+            {m.name} ({m.character}){" "}
+            <button onClick={() => props.onToggle(m.id)}>
+              {m.done ? "Undo" : "Complete"}
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function AddMissionForm(props) {
+  const [name, setName] = useState("");
+  const [character, setCharacter] = useState("Nero");
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    if (name === "") return;
+    props.onAdd(name, character);
+    setName("");
+  }
+
+  return (
+    <form className="card" onSubmit={handleSubmit}>
+      <h2>Add Mission</h2>
+      <input
+        type="text"
+        placeholder="Mission name"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
+      <select value={character} onChange={(e) => setCharacter(e.target.value)}>
+        <option value="Nero">Nero</option>
+        <option value="Dante">Dante</option>
+      </select>
+      <button type="submit">Add</button>
+    </form>
+  );
+}
+
+function StatusSummary(props) {
+  return (
+    <div className="card">
+      <h2>Status</h2>
+      <p>{props.completed} of {props.total} missions completed</p>
+      <p>Selected character: {props.selected}</p>
+      <p>Theme mode: {props.theme}</p>
+    </div>
+  );
+}
+
+function About() {
+  return (
+    <div className="card">
+      <h2>About</h2>
+      <p>
+         A simple dashboard for the vanilla version of Devil May Cry 4.
+      </p>
+    </div>
+  );
+}
